@@ -1,4 +1,4 @@
-class GameMap {
+export default class GameMap {
     public readonly mapTemplate: number[][];
     public readonly map: number[][] | string[][];
 
