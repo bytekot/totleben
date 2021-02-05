@@ -12,10 +12,22 @@
             text-align: center;
             line-height: 32px;
             border-top: 1px solid #000;
+
+            user-select: none;
+            cursor: pointer;
             
             &.mine {
                 background-color: red;
             }
+
+            &.mask {
+                text-indent: -1000px;
+                background-color: #fff;
+            }
+
+             &.flag {
+                 background-color: yellow;
+             }
         }
     }
     
