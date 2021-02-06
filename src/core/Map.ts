@@ -38,7 +38,7 @@ export default class GameMap {
     getMarkedMap(templateMap) {
         const map = templateMap.map(row => (
             row.map(cell => (
-                cell ? 'mine' : cell
+                { value: cell ? 'mine' : cell, flag: 'closed' }
             ))
         ));
 
@@ -60,7 +60,7 @@ export default class GameMap {
     processCell(map, rowIndex, cellIndex) {
         const row = map[rowIndex];
 
-        if (row[cellIndex] === 'mine') {
+        if (row[cellIndex].value === 'mine') {
             // Left cell
             this.maybeIncreaseCellValue(row, cellIndex - 1);
             // Right cell
@@ -81,8 +81,44 @@ export default class GameMap {
     }
 
     maybeIncreaseCellValue(row, cellIndex) {
-        if (typeof row[cellIndex] === 'number') {
-            row[cellIndex] = row[cellIndex] + 1;
+        if (row[cellIndex] && typeof row[cellIndex].value === 'number') {
+            row[cellIndex].value = row[cellIndex].value + 1;
+        }
+    }
+
+
+    processCell2(rowIndex, cellIndex) {
+        const row = this.map[rowIndex];
+
+        row[cellIndex].flag = 'opened';
+
+        if (row[cellIndex].value === 0) {
+            // Left cell
+            this.maybeIncreaseCellValue2(row, cellIndex - 1);
+            // Right cell
+            this.maybeIncreaseCellValue2(row, cellIndex + 1);
+            // Adjacent cells in the top row
+            this.processAdjacentCells2(this.map[rowIndex - 1], cellIndex);
+            // Adjacent cells in the bottom row
+            this.processAdjacentCells2(this.map[rowIndex + 1], cellIndex);
+        }
+    }
+
+    processAdjacentCells2(row, cellIndex) {
+        if (row) {
+            this.maybeIncreaseCellValue2(row, cellIndex);
+            this.maybeIncreaseCellValue2(row, cellIndex - 1);
+            this.maybeIncreaseCellValue2(row, cellIndex + 1);
+        }
+    }
+
+    maybeIncreaseCellValue2(row, cellIndex) {
+        if (row[cellIndex] && row[cellIndex].flag !== 'opened') {
+            row[cellIndex].flag = 'opened';
+
+            if (row[cellIndex].value === 0) {
+                this.processCell2(this.map.indexOf(row), cellIndex);
+            }
         }
     }
 }
