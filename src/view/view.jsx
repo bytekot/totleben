@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBomb, faFlag } from '@fortawesome/free-solid-svg-icons';
-import GameMap from '../core/Map';
+import Game from '../core/Game';
 
-class GameMapView extends React.Component {
+class GameView extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            map: props.gameMap.template,
-            width: props.gameMap.width,
-            height: props.gameMap.height
+            map: props.game.map
         };
     }
 
@@ -30,10 +28,10 @@ class GameMapView extends React.Component {
             ? event.target
             : this.getCellFromChild(event.target);
 
-        this.props.gameMap.openCell(
+        this.props.game.openCell(
             Number(cellElement.getAttribute('index'))
         );
-        this.setState({ map: this.props.gameMap.map });
+        this.forceUpdate();
     }
 
     onContextMenu = event => {
@@ -80,9 +78,9 @@ class GameMapView extends React.Component {
     }
 }
 
-const gameMap = new GameMap({
-    width:16,
-    height: 16,
+const game = new Game({
+    mapWidth:16,
+    mapHeight: 16,
     minesNumber: 45
 });
 
@@ -91,6 +89,6 @@ rootContainer.setAttribute('id', 'root');
 document.body.appendChild(rootContainer);
 
 ReactDOM.render(
-    <GameMapView gameMap={gameMap} />,
+    <GameView game={game} />,
     document.getElementById('root')
 );
