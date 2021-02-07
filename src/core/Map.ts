@@ -49,21 +49,6 @@ export default class GameMap {
         return map;
     }
 
-    private getIndexModifiries = (index: number): number[] => {
-        const mapWidth = this.width;
-        const indexModifiries = [ mapWidth, -mapWidth];
-
-        if (index % mapWidth !== 0) {
-            indexModifiries.push(-1, mapWidth - 1, -mapWidth -1);
-        }
-
-        if ((index + 1) % mapWidth !== 0) {
-            indexModifiries.push(1, mapWidth + 1, -mapWidth + 1);
-        }
-
-        return indexModifiries;
-    };
-
     public openCell = (index: number): Array<Cell> => {
         const map = this.map;
 
@@ -85,6 +70,21 @@ export default class GameMap {
 
         return map;
     }
+
+    private getIndexModifiries = (index: number): number[] => {
+        const mapWidth = this.width;
+        const indexModifiries = [ mapWidth, -mapWidth];
+
+        if (index % mapWidth !== 0) {
+            indexModifiries.push(-1, mapWidth - 1, -mapWidth -1);
+        }
+
+        if ((index + 1) % mapWidth !== 0) {
+            indexModifiries.push(1, mapWidth + 1, -mapWidth + 1);
+        }
+
+        return indexModifiries;
+    };
 }
 
 interface Cell {

@@ -1,11 +1,13 @@
 $border: 1px solid #000;
-$map-size: 9;
+$map-size: 16;
 $cell-size: 32px;
 
 .container {
   display: flex;
   flex-flow: row wrap;
   width: $cell-size * $map-size + $map-size;
+
+  margin: 32px auto;
 
   border-left: $border;
   border-bottom: $border;
@@ -23,18 +25,16 @@ $cell-size: 32px;
     cursor: pointer;
 
     &.mine {
-      background-color: red;
-      color: red;
+      background-color: rgb(235, 67, 57);
     }
 
     &.closed {
-      background-color: #fff;
-      color: #fff;
+      background-color: #ddd;
+      color: #ddd;
     }
 
     &.flag {
-      background-color: yellow;
-      color: yellow;
+        background-color: #ddd;
     }
   }
 }
