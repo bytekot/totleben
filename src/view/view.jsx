@@ -7,60 +7,40 @@ class GameMapView extends React.Component {
         super(props);
 
         this.state = {
-            map: props.gameMap.map
+            map: props.gameMap.map,
+            width: props.gameMap.width,
+            height: props.gameMap.height
         };
     }
 
     onClick = event => {
-        const cellElement = event.target;
-        const rowIndex = Number(cellElement.getAttribute('row'));
-        const cellIndex = Number(cellElement.getAttribute('cell'));
-        const cell = this.state.map[rowIndex][cellIndex];
-
-        this.props.gameMap.processCell2(
-            Number(cellElement.getAttribute('row')),
-            Number(cellElement.getAttribute('cell'))
-        );
-
         this.setState({
-            map: this.props.gameMap.map
+            map: this.props.gameMap.openCell(
+                Number(event.target.getAttribute('index'))
+            )
         });
     }
 
     onContextMenu = event => {
         event.preventDefault();
 
-        const cellElement = event.target;
-        const rowIndex = Number(cellElement.getAttribute('row'));
-        const cellIndex = Number(cellElement.getAttribute('cell'));
-        const cell = this.state.map[rowIndex][cellIndex];
+        this.state.map[Number(event.target.getAttribute('index'))].flag = 'flag';
 
-        cell.flag = cell.flag + ' flag';
-
-        this.setState({
-            map: this.props.gameMap.map
-        });
+        this.forceUpdate();
     }
 
     render() {
         return (
             <div className="container">
                 {
-                    this.state.map.map((row, rowIndex) => (
-                        <div className="row">
-                            {
-                                row.map((cell, cellIndex) => (
-                                    <div
-                                        cell={cellIndex}
-                                        row={rowIndex}
-                                        className={`cell ${cell.flag} ${cell.value === 'mine' ? 'mine' : ''}`}
-                                        onClick={this.onClick}
-                                        onContextMenu={this.onContextMenu}
-                                    >
-                                        {cell.value !== 'mine' ? cell.value : '💣'}
-                                    </div>
-                                ))
-                            }
+                    this.state.map.map((cell, index) => (
+                        <div
+                            index={index}
+                            className={`cell ${cell.flag} ${cell.value === 9 ? 'mine' : ''}`}
+                            onClick={this.onClick}
+                            onContextMenu={this.onContextMenu}
+                        >
+                            {cell.value}
                         </div>
                     ))
                 }
@@ -70,9 +50,9 @@ class GameMapView extends React.Component {
 }
 
 const gameMap = new GameMap({
-    width: 10,
-    height: 10,
-    minesNumber: 20
+    width:9,
+    height: 9,
+    minesNumber: 10
 });
 
 const rootContainer = document.createElement('div');

@@ -1,37 +1,40 @@
+$border: 1px solid #000;
+$map-size: 9;
+$cell-size: 32px;
+
 .container {
-    display: flex;
-    flex-direction: row;
-    
-    .row {
-        border-right: 1px solid #000;
-        border-bottom: 1px solid #000;
-        
-        .cell {
-            height: 32px;
-            width: 32px;
-            text-align: center;
-            line-height: 32px;
-            border-top: 1px solid #000;
+  display: flex;
+  flex-flow: row wrap;
+  width: $cell-size * $map-size + $map-size;
 
-            user-select: none;
-            cursor: pointer;
-            
-            &.mine {
-                background-color: red;
-            }
+  border-left: $border;
+  border-bottom: $border;
 
-            &.closed {
-                text-indent: -1000px;
-                background-color: #fff;
-            }
+  .cell {
+    height: $cell-size;
+    width: $cell-size;
+    text-align: center;
+    line-height: $cell-size;
 
-             &.flag {
-                 background-color: yellow;
-             }
-        }
+    border-top: $border;
+    border-right: $border;
+
+    user-select: none;
+    cursor: pointer;
+
+    &.mine {
+      background-color: red;
+      color: red;
     }
-    
-    .row:first-child {
-        border-left: 1px solid #000;
+
+    &.closed {
+      background-color: #fff;
+      color: #fff;
     }
+
+    &.flag {
+      background-color: yellow;
+      color: yellow;
+    }
+  }
 }

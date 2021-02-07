@@ -1,124 +1,93 @@
 export default class GameMap {
-    public readonly mapTemplate: number[][];
-    public readonly map: number[][] | string[][];
+    public readonly map: Array<Cell>;
+    private readonly width: number;
 
-    constructor({ width, height, minesNumber }: { width: number, height: number, minesNumber: number }) {
-        this.mapTemplate = this.fillMap(
-            this.createEmptyMap(width, height),
-            minesNumber
-        );
-
-        this.map = this.getMarkedMap(this.mapTemplate);
+    constructor({ width, height, minesNumber }:
+        { width: number, height: number, minesNumber: number }
+    ) {
+        this.width = width;
+        this.map = this.create(width, height, minesNumber);
     }
 
-    createEmptyMap(width, height) {
-        return Array.from({ length: width }, () =>
-            Array.from({ length: height }, () => 0)
-        );
-    }
+    private create = (width: number, height: number, minesNumber: number): Array<Cell> => (
+        this.mark(
+            this.shuffle(
+                Array.from({ length: width * height - minesNumber }, () =>
+                    ({ value: 0, flag: 'closed' })
+                ).concat(
+                    Array.from({ length: minesNumber }, () =>
+                        ({ value: 9, flag: 'closed' })
+                    )
+                )
+            )
+        )
+    )
 
-    fillMap(map, minesNumber) {
-        while (!this.isMapFilled(map, minesNumber)) {
-            const row = map[this.getRandomIndex(map)];
+    private shuffle = (array: any[]): any[] => {
+        for (let index = array.length - 1; index > 0; index--) {
+            const i = Math.floor(Math.random() * (index + 1));
 
-            row[this.getRandomIndex(row)] = 1;
+            [array[index], array[i]] = [array[i], array[index]];
         }
 
-        return map;
+        return array;
     }
 
-    isMapFilled(map, minesNumber) {
-        return map.flat().reduce((item1, item2) => item1 + item2) === minesNumber;
-    }
+    private mark = (map: Array<Cell>): Array<Cell> => {
+        for (let index = 0; index < map.length; index++) {
+            if (map[index].value === 9) {
+                for (const modifier of this.getIndexModifiries(index)) {
+                    const cell = map[index + modifier];
 
-    getRandomIndex(array) {
-        return Math.floor(Math.random() * array.length);
-    }
-
-    getMarkedMap(templateMap) {
-        const map = templateMap.map(row => (
-            row.map(cell => (
-                { value: cell ? 'mine' : cell, flag: 'closed' }
-            ))
-        ));
-
-        for (let rowIndex = 0; rowIndex < map.length; rowIndex++) {
-            this.processRow(map, rowIndex);
-        }
-
-        return map;
-    }
-
-    processRow(map, rowIndex) {
-        const row = map[rowIndex];
-
-        for (let cellIndex = 0; cellIndex < row.length; cellIndex++) {
-            this.processCell(map, rowIndex, cellIndex);
-        }
-    }
-
-    processCell(map, rowIndex, cellIndex) {
-        const row = map[rowIndex];
-
-        if (row[cellIndex].value === 'mine') {
-            // Left cell
-            this.maybeIncreaseCellValue(row, cellIndex - 1);
-            // Right cell
-            this.maybeIncreaseCellValue(row, cellIndex + 1);
-            // Adjacent cells in the top row
-            this.processAdjacentCells(map[rowIndex - 1], cellIndex);
-            // Adjacent cells in the bottom row
-            this.processAdjacentCells(map[rowIndex + 1], cellIndex);
-        }
-    }
-
-    processAdjacentCells(row, cellIndex) {
-        if (row) {
-            this.maybeIncreaseCellValue(row, cellIndex);
-            this.maybeIncreaseCellValue(row, cellIndex - 1);
-            this.maybeIncreaseCellValue(row, cellIndex + 1);
-        }
-    }
-
-    maybeIncreaseCellValue(row, cellIndex) {
-        if (row[cellIndex] && typeof row[cellIndex].value === 'number') {
-            row[cellIndex].value = row[cellIndex].value + 1;
-        }
-    }
-
-
-    processCell2(rowIndex, cellIndex) {
-        const row = this.map[rowIndex];
-
-        row[cellIndex].flag = 'opened';
-
-        if (row[cellIndex].value === 0) {
-            // Left cell
-            this.maybeIncreaseCellValue2(row, cellIndex - 1);
-            // Right cell
-            this.maybeIncreaseCellValue2(row, cellIndex + 1);
-            // Adjacent cells in the top row
-            this.processAdjacentCells2(this.map[rowIndex - 1], cellIndex);
-            // Adjacent cells in the bottom row
-            this.processAdjacentCells2(this.map[rowIndex + 1], cellIndex);
-        }
-    }
-
-    processAdjacentCells2(row, cellIndex) {
-        if (row) {
-            this.maybeIncreaseCellValue2(row, cellIndex);
-            this.maybeIncreaseCellValue2(row, cellIndex - 1);
-            this.maybeIncreaseCellValue2(row, cellIndex + 1);
-        }
-    }
-
-    maybeIncreaseCellValue2(row, cellIndex) {
-        if (row[cellIndex] && row[cellIndex].flag !== 'opened') {
-            row[cellIndex].flag = 'opened';
-
-            if (row[cellIndex].value === 0) {
-                this.processCell2(this.map.indexOf(row), cellIndex);
+                    if (cell && cell.value !== 9) {
+                        cell.value++;
+                    }
+                }
             }
         }
+
+        return map;
+    }
+
+    private getIndexModifiries = (index: number): number[] => {
+        const mapWidth = this.width;
+        const indexModifiries = [ mapWidth, -mapWidth];
+
+        if (index % mapWidth !== 0) {
+            indexModifiries.push(-1, mapWidth - 1, -mapWidth -1);
+        }
+
+        if ((index + 1) % mapWidth !== 0) {
+            indexModifiries.push(1, mapWidth + 1, -mapWidth + 1);
+        }
+
+        return indexModifiries;
+    };
+
+    public openCell = (index: number): Array<Cell> => {
+        const map = this.map;
+
+        map[index].flag = 'opened';
+
+        if (map[index].value === 0) {
+            for (const modifier of this.getIndexModifiries(index)) {
+                const cell = map[index + modifier];
+
+                if (cell && cell.flag !== 'opened') {
+                    cell.flag = 'opened';
+
+                    if (cell.value === 0) {
+                        this.openCell(index + modifier);
+                    }
+                }
+            }
+        }
+
+        return map;
     }
 }
+
+interface Cell {
+    value: number,
+    flag: string | undefined;
+};
