@@ -9,7 +9,7 @@ class GameMapView extends React.Component {
         super(props);
 
         this.state = {
-            map: props.gameMap.map,
+            map: props.gameMap.template,
             width: props.gameMap.width,
             height: props.gameMap.height
         };
@@ -33,7 +33,7 @@ class GameMapView extends React.Component {
         this.props.gameMap.openCell(
             Number(cellElement.getAttribute('index'))
         );
-        this.forceUpdate();
+        this.setState({ map: this.props.gameMap.map });
     }
 
     onContextMenu = event => {
@@ -83,7 +83,7 @@ class GameMapView extends React.Component {
 const gameMap = new GameMap({
     width:16,
     height: 16,
-    minesNumber: 40
+    minesNumber: 45
 });
 
 const rootContainer = document.createElement('div');
