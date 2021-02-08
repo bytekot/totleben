@@ -36,6 +36,7 @@ class GameView extends React.Component {
         }
 
         const finished = this.props.game.openCell(cellIndex, true);
+
         if (finished) {
             this.setState({ finished: finished });
             return;
@@ -54,6 +55,7 @@ class GameView extends React.Component {
         cell.flag = cell.flag !== 'flag' ? 'flag' : 'closed';
         
         const finished = this.props.game.isFinished();
+
         if (finished) {
             this.setState({ finished: finished });
             return;
