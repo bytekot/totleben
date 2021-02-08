@@ -1,23 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap");
 
-$border: 1px solid #333;
+$border: 1px solid rgba(0, 0, 0, 0.1);
 $map-size: 16;
 $cell-size: 32px;
 
 .container {
   display: flex;
   flex-flow: row wrap;
-  width: $cell-size * $map-size + $map-size;
+  width: $cell-size * $map-size + $map-size + $map-size + 16;
 
   margin: 64px auto;
 
   border-left: $border;
   border-bottom: $border;
-  border-radius: 4px;
+  border-radius: 8px;
 
   .cell {
-    font-family: 'Major Mono Display', monospace;
-    text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+    margin: 1px;
+
+    font-family: "Major Mono Display", monospace;
+    text-shadow: 0px 2px 3px rgba(255, 255, 255, 0.5);
 
     height: $cell-size;
     width: $cell-size;
@@ -30,41 +32,43 @@ $cell-size: 32px;
     user-select: none;
     cursor: pointer;
 
-    box-shadow: 0px 5px 2px 2px rgba(34, 60, 80, 0.1) inset;
-
     &.mine {
       &.opened {
-          border-radius: 2px;
-          //animation: burn 1000ms ease-out forwards;
+        border-radius: 2px;
       }
     }
 
     &.closed {
-      background-color: #ddd;
-      color: #ddd;
-      box-shadow: none;
+      color: transparent;
+      text-shadow: none;
+
+      background-color: rgba(0, 0, 0, 0.1);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      border-right: 1px solid rgba(0, 0, 0, 0.06);
     }
 
     &.flag {
-      background-color: #ddd;
-      box-shadow: none;
+      background-color: rgba(0, 0, 0, 0.1);
+      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
     }
   }
 
   &.loss {
-      animation: burn 1000ms ease-out forwards;
-      
-      .cell {
-          cursor: default;
-      }
+    animation: burn 1000ms ease-out forwards;
+
+    .cell {
+      cursor: default;
+    }
   }
 
   &.win {
-      background:  #51BD72;
+    background: #51bd72;
 
-      .cell {
-          cursor: default;
-      }
+    .cell {
+      cursor: default;
+    }
   }
 }
 
@@ -85,25 +89,13 @@ $cell-size: 32px;
   }
 
   50% {
-      background: rgba(255, 130, 110, 1);
+    background: rgba(255, 130, 110, 1);
   }
 
-  /*
   100% {
     color: rgba(0, 0, 0, 1);
-    background:  rgba(255, 130, 110, 1);
-    box-shadow:
-      0 -35px 40px 30px rgba(255, 130, 10, 0),
-      0 -30px 30px 10px rgba(230, 30, 10, 0),
-      0 -20px 10px 0 rgba(255, 255, 10, 0);
-  }
-  */
-  100% {
-    color: rgba(0, 0, 0, 1);
-    background:  rgba(255, 130, 110, 1);
-    box-shadow:
-      0 0 40px 30px rgba(255, 130, 10, 0),
-      0 0 30px 10px rgba(230, 30, 10, 0),
-      0 0 10px 0 rgba(255, 255, 10, 0);
+    background: rgba(255, 130, 110, 1);
+    box-shadow: 0 0 40px 30px rgba(255, 130, 10, 0),
+      0 0 30px 10px rgba(230, 30, 10, 0), 0 0 10px 0 rgba(255, 255, 10, 0);
   }
 }
