@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap");
 
 $border: 1px solid rgba(0, 0, 0, 0.1);
-$map-size: 9;
+$map-size: 16;
 $cell-size: 32px;
 
 .container {
@@ -58,7 +58,7 @@ $cell-size: 32px;
   }
 
   &.loss {
-    animation: burn 1000ms ease-out forwards, bounce 300ms;
+    animation: burn 1000ms ease-out forwards, tada 650ms;
 
     .cell {
       cursor: default;
@@ -67,7 +67,6 @@ $cell-size: 32px;
 
   &.win {
     background: #98DEAD;
-    animation: tada 650ms;
 
     .cell {
       cursor: default;

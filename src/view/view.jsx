@@ -98,9 +98,9 @@ class GameView extends React.Component {
 }
 
 const game = new Game({
-    mapWidth: 9,
-    mapHeight: 9,
-    minesNumber: 10
+    mapWidth: 16,
+    mapHeight: 16,
+    minesNumber: 45
 });
 
 const rootContainer = document.createElement('div');
