@@ -6,7 +6,6 @@ export default class Game {
     private readonly mapWidth: number;
     private readonly minesNumber: number;
     private started: boolean;
-    private finished: boolean;
     public readonly map: Array<Cell>;
 
     constructor({ mapWidth, mapHeight, minesNumber }: {
@@ -14,7 +13,6 @@ export default class Game {
         mapHeight: number,
         minesNumber: number
     }) {
-        this.finished = false;
         this.mapWidth = mapWidth;
         this.minesNumber = minesNumber;
         this.map = this.createMapTemplate(mapWidth, mapHeight);
@@ -123,7 +121,7 @@ export default class Game {
         return indexModifiries;
     };
 
-    public openCell = (index: number): boolean => {
+    public openCell = (index: number, check: boolean = false): boolean | string => {
         if (!this.started) {
             this.createMap(index);
         }
@@ -145,10 +143,26 @@ export default class Game {
             }
         }
 
-        if (map[index].value === 9) {
-            this.finished = true;
+        return check ? this.isFinished(index) : false;
+    }
+
+    isFinished = (index: number = undefined): boolean | string => {
+        const map = this.map;
+
+        if (index && map[index].value === 9) {
+            return 'loss';
         }
 
-        return this.finished;
+        const finished = map.every(cell => cell.value === 9 ? true : cell.flag === 'opened');
+
+        if (finished) {
+            const cell = map.find(cell => cell.value === 9 && cell.flag != 'flag');
+            if (cell) {
+                cell.flag = 'flag';
+            }
+            return'win';
+        }
+
+        return finished;
     }
 }

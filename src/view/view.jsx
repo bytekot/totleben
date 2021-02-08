@@ -35,8 +35,9 @@ class GameView extends React.Component {
             return;
         }
 
-        if (this.props.game.openCell(cellIndex)) {
-            this.setState({ finished: true });
+        const finished = this.props.game.openCell(cellIndex, true);
+        if (finished) {
+            this.setState({ finished: finished });
             return;
         }
         this.forceUpdate();
@@ -51,7 +52,12 @@ class GameView extends React.Component {
         const cell = this.state.map[Number(cellElement.getAttribute('index'))];
 
         cell.flag = cell.flag !== 'flag' ? 'flag' : 'closed';
-
+        
+        const finished = this.props.game.isFinished();
+        if (finished) {
+            this.setState({ finished: finished });
+            return;
+        }
         this.forceUpdate();
     }
 
@@ -71,7 +77,7 @@ class GameView extends React.Component {
         const finished = this.state.finished;
 
         return (
-            <div className={`container ${finished ? 'finished' : ''}`}>
+            <div className={`container ${finished ? finished : ''}`}>
                 {
                     this.state.map.map((cell, index) => (
                         <div
@@ -90,7 +96,7 @@ class GameView extends React.Component {
 }
 
 const game = new Game({
-    mapWidth:16,
+    mapWidth: 16,
     mapHeight: 16,
     minesNumber: 45
 });

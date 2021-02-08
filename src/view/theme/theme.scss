@@ -51,9 +51,17 @@ $cell-size: 32px;
     }
   }
 
-  &.finished {
+  &.loss {
       animation: burn 1000ms ease-out forwards;
       
+      .cell {
+          cursor: default;
+      }
+  }
+
+  &.win {
+      background:  #51BD72;
+
       .cell {
           cursor: default;
       }
