@@ -6,6 +6,7 @@ export default class Game {
     private readonly mapWidth: number;
     private readonly minesNumber: number;
     private started: boolean;
+    private finished: boolean;
     public readonly map: Array<Cell>;
 
     constructor({ mapWidth, mapHeight, minesNumber }: {
@@ -13,6 +14,7 @@ export default class Game {
         mapHeight: number,
         minesNumber: number
     }) {
+        this.finished = false;
         this.mapWidth = mapWidth;
         this.minesNumber = minesNumber;
         this.map = this.createMapTemplate(mapWidth, mapHeight);
@@ -121,7 +123,7 @@ export default class Game {
         return indexModifiries;
     };
 
-    public openCell = (index: number): Array<Cell> => {
+    public openCell = (index: number): boolean => {
         if (!this.started) {
             this.createMap(index);
         }
@@ -143,6 +145,10 @@ export default class Game {
             }
         }
 
-        return map;
+        if (map[index].value === 9) {
+            this.finished = true;
+        }
+
+        return this.finished;
     }
 }

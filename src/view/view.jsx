@@ -9,7 +9,8 @@ class GameView extends React.Component {
         super(props);
 
         this.state = {
-            map: props.game.map
+            map: props.game.map,
+            finished: false
         };
     }
 
@@ -34,7 +35,10 @@ class GameView extends React.Component {
             return;
         }
 
-        this.props.game.openCell(cellIndex);
+        if (this.props.game.openCell(cellIndex)) {
+            this.setState({ finished: true });
+            return;
+        }
         this.forceUpdate();
     }
 
@@ -64,15 +68,17 @@ class GameView extends React.Component {
     };
 
     render() {
+        const finished = this.state.finished;
+
         return (
-            <div className="container">
+            <div className={`container ${finished ? 'finished' : ''}`}>
                 {
                     this.state.map.map((cell, index) => (
                         <div
                             index={index}
                             className={`cell ${cell.flag} ${cell.value === 9 ? 'mine' : ''}`}
-                            onClick={this.onClick}
-                            onContextMenu={this.onContextMenu}
+                            onClick={!finished ? this.onClick : () => {}}
+                            onContextMenu={!finished ? this.onContextMenu : () => {}}
                         >
                             {this.getCallValue(cell)}
                         </div>
