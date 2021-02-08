@@ -1,19 +1,21 @@
 @import url("https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap");
 
 $border: 1px solid rgba(0, 0, 0, 0.1);
-$map-size: 16;
+$map-size: 9;
 $cell-size: 32px;
 
 .container {
   display: flex;
   flex-flow: row wrap;
-  width: $cell-size * $map-size + $map-size + $map-size + 16;
+  width: $cell-size * $map-size + ($map-size * 3);
 
   margin: 64px auto;
 
   border-left: $border;
   border-bottom: $border;
   border-radius: 8px;
+
+  animation: fadeInDownBig 500ms;
 
   .cell {
     margin: 1px;
@@ -56,7 +58,7 @@ $cell-size: 32px;
   }
 
   &.loss {
-    animation: burn 1000ms ease-out forwards;
+    animation: burn 1000ms ease-out forwards, bounce 300ms;
 
     .cell {
       cursor: default;
@@ -64,7 +66,8 @@ $cell-size: 32px;
   }
 
   &.win {
-    background: #51bd72;
+    background: #98DEAD;
+    animation: tada 650ms;
 
     .cell {
       cursor: default;
@@ -72,6 +75,7 @@ $cell-size: 32px;
   }
 }
 
+// Animations
 @keyframes flare {
   100% {
     transform: translateY(-20px) scale(1.5);
@@ -99,3 +103,28 @@ $cell-size: 32px;
       0 0 30px 10px rgba(230, 30, 10, 0), 0 0 10px 0 rgba(255, 255, 10, 0);
   }
 }
+
+@keyframes bounce { 
+    0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 
+    40% {transform: translateY(-30px);} 
+    60% {transform: translateY(-15px);} 
+} 
+
+@keyframes fadeInDownBig { 
+    0% { 
+        opacity: 0; 
+        transform: translateY(-2000px); 
+    } 
+    100% { 
+        opacity: 1; 
+        transform: translateY(0); 
+    } 
+}
+
+@keyframes tada { 
+    0% {transform: scale(1);} 
+    10%, 20% {transform: scale(0.9) rotate(-3deg);} 
+    30%, 50%, 70%, 90% {transform: scale(1.1) rotate(3deg);} 
+    40%, 60%, 80% {transform: scale(1.1) rotate(-3deg);} 
+    100% {transform: scale(1) rotate(0);} 
+} 
