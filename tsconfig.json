@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "strict": true,
         "outDir": "docs",
         "target": "es5",
         "resolveJsonModule": true,

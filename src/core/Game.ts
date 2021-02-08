@@ -3,9 +3,11 @@ interface Cell {
     flag: string | undefined;
 };
 export default class Game {
+    private started: boolean = false;
+
     private readonly mapWidth: number;
     private readonly minesNumber: number;
-    private started: boolean;
+
     public readonly map: Array<Cell>;
 
     constructor({ mapWidth, mapHeight, minesNumber }: {
@@ -61,7 +63,7 @@ export default class Game {
         currentIndex: number,
         exceptions: number[]
     ): number => {
-        let index: number;
+        let index;
 
         while (index === undefined || exceptions.includes(index)) {
             index = Math.floor(Math.random() * (currentIndex + 1));
@@ -146,7 +148,7 @@ export default class Game {
         return check ? this.isFinished(index) : false;
     }
 
-    isFinished = (index: number = undefined): boolean | string => {
+    isFinished = (index: number): boolean | string => {
         const map = this.map;
 
         if (index && map[index].value === 9) {
