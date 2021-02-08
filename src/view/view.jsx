@@ -27,10 +27,14 @@ class GameView extends React.Component {
         const cellElement = event.target.classList.contains('cell')
             ? event.target
             : this.getCellFromChild(event.target);
+        const cellIndex = Number(cellElement.getAttribute('index'));
 
-        this.props.game.openCell(
-            Number(cellElement.getAttribute('index'))
-        );
+        if (this.state.map[cellIndex].flag === 'flag') {
+            event.preventDefault();
+            return;
+        }
+
+        this.props.game.openCell(cellIndex);
         this.forceUpdate();
     }
 
@@ -40,8 +44,9 @@ class GameView extends React.Component {
         const cellElement = event.target.classList.contains('cell')
             ? event.target
             : this.getCellFromChild(event.target);
+        const cell = this.state.map[Number(cellElement.getAttribute('index'))];
 
-        this.state.map[Number(cellElement.getAttribute('index'))].flag = 'flag';
+        cell.flag = cell.flag !== 'flag' ? 'flag' : 'closed';
 
         this.forceUpdate();
     }
