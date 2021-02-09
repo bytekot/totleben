@@ -2,6 +2,9 @@ export interface Cell {
     value: number,
     flag: string | undefined;
 };
+
+export type GameFinished = false | 'win' | 'loss';
+
 export default class Game {
     private started: boolean = false;
 
@@ -20,7 +23,7 @@ export default class Game {
         this.map = this.createMapTemplate(mapWidth, mapHeight);
     }
 
-    private createMapTemplate = (
+    private readonly createMapTemplate = (
         mapWidth: number,
         mapHeight: number
     ): Array<Cell> => (
@@ -30,7 +33,7 @@ export default class Game {
         ))
     )
 
-    private createMap = (startIndex: number): Array<Cell> => {
+    private readonly createMap = (startIndex: number): Array<Cell> => {
         const startSquareCoordinates = this.getIndexModifiries(startIndex).map(
             value => startIndex + value
         );
@@ -59,7 +62,7 @@ export default class Game {
         return map;
     }
 
-    getRandomIndex = (
+    private readonly getRandomIndex = (
         currentIndex: number,
         exceptions: number[]
     ): number => {
@@ -76,7 +79,7 @@ export default class Game {
      * @param array 
      * @param exceptions Array of indexes not involved in shuffling
      */
-    private shuffle = (
+    private readonly shuffle = (
         array: any[],
         exceptions: number[] = []
     ): any[] => {
@@ -92,7 +95,7 @@ export default class Game {
         return array;
     }
 
-    private markMap = (map: Array<Cell>): Array<Cell> => {
+    private readonly markMap = (map: Array<Cell>): Array<Cell> => {
         for (let index = 0; index < map.length; index++) {
             if (map[index].value === 9) {
                 for (const modifier of this.getIndexModifiries(index)) {
@@ -108,7 +111,7 @@ export default class Game {
         return map;
     }
 
-    private getIndexModifiries = (index: number): number[] => {
+    private readonly getIndexModifiries = (index: number): number[] => {
         const mapWidth = this.mapWidth;
         const indexModifiries = [mapWidth, -mapWidth];
 
@@ -123,7 +126,11 @@ export default class Game {
         return indexModifiries;
     };
 
-    public openCell = (index: number, check: boolean = false): boolean | string => {
+    public readonly openCell = (
+        index: number,
+        check: boolean = false
+    ): GameFinished => {
+
         if (!this.started) {
             this.createMap(index);
         }
@@ -148,7 +155,7 @@ export default class Game {
         return check ? this.isFinished(index) : false;
     }
 
-    isFinished = (index: number): boolean | string => {
+    public readonly isFinished = (index?: number): GameFinished => {
         const map = this.map;
 
         if (index && map[index].value === 9) {
@@ -159,10 +166,12 @@ export default class Game {
 
         if (finished) {
             const cell = map.find(cell => cell.value === 9 && cell.flag != 'flag');
+
             if (cell) {
                 cell.flag = 'flag';
             }
-            return'win';
+
+            return 'win';
         }
 
         return finished;

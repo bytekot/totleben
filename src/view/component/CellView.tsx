@@ -1,15 +1,18 @@
 import React, { MouseEvent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBomb, faFlag } from '@fortawesome/free-solid-svg-icons';
-import { Cell } from '../../core/Game';
+import { faBomb } from '@fortawesome/free-solid-svg-icons/faBomb';
+import { faFlag } from '@fortawesome/free-solid-svg-icons/faFlag';
+import { Cell, GameFinished } from '../../core/Game';
 
-const CellView = ({ cell, cellIndex, gameFinished, onClick, onContextMenu }: {
-    cell: Cell,
-    cellIndex: number,
-    gameFinished: 'win' | 'loss' | false,
-    onClick: (event: MouseEvent) => void,
-    onContextMenu: (event: MouseEvent) => void
-}) => {
+interface CellViewProps {
+    cell: Cell;
+    cellIndex: number;
+    gameFinished: GameFinished;
+    onClick: (event: MouseEvent) => void;
+    onContextMenu: (event: MouseEvent) => void;
+}
+
+const CellView = ({ cell, cellIndex, gameFinished, onClick, onContextMenu }: CellViewProps) => {
 
     const getCallValue = (cell: Cell) => {
         if (cell.flag === 'flag') {

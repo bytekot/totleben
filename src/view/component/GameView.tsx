@@ -1,14 +1,17 @@
 import React, { MouseEvent } from 'react';
 import CellView from './CellView';
-import { Cell } from '../../core/Game';
+import Game, { Cell, GameFinished } from '../../core/Game';
 
+interface GameViewProps {
+    game: Game
+}
 interface GameViewState {
     map: Array<Cell>,
-    finished: 'win' | 'loss' | false
+    finished: GameFinished
 }
 
-export default class GameView extends React.Component<any, GameViewState> {
-    constructor(props: any) {
+export default class GameView extends React.Component<GameViewProps, GameViewState> {
+    constructor(props: GameViewProps) {
         super(props);
 
         this.state = {
@@ -17,7 +20,7 @@ export default class GameView extends React.Component<any, GameViewState> {
         };
     }
 
-    getCellFromChild = (element: any) => {
+    private readonly getCellFromChild = (element: any): HTMLElement => {
         let cellElement = element.parentNode;
 
         while (cellElement && !cellElement.classList.contains('cell')) {
@@ -27,7 +30,7 @@ export default class GameView extends React.Component<any, GameViewState> {
         return cellElement;
     }
 
-    onClick = (event: MouseEvent) => {
+    private readonly openCell = (event: MouseEvent): void => {
         const cellElement = event.currentTarget.classList.contains('cell')
             ? event.currentTarget
             : this.getCellFromChild(event.currentTarget);
@@ -47,7 +50,7 @@ export default class GameView extends React.Component<any, GameViewState> {
         this.forceUpdate();
     }
 
-    onContextMenu = (event: MouseEvent) => {
+    private readonly toggleFlag = (event: MouseEvent): void => {
         event.preventDefault();
 
         const cellElement = event.currentTarget.classList.contains('cell')
@@ -77,8 +80,8 @@ export default class GameView extends React.Component<any, GameViewState> {
                             cell={cell}
                             cellIndex={index}
                             gameFinished={finished}
-                            onClick={this.onClick}
-                            onContextMenu={this.onContextMenu}
+                            onClick={this.openCell}
+                            onContextMenu={this.toggleFlag}
                         />
                     ))
                 }
