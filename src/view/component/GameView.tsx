@@ -25,17 +25,17 @@ export default class GameView extends React.Component<GameViewProps, GameViewSta
             return;
         }
 
-        const cellElement = event.currentTarget;
-        const cellIndex = Number(cellElement.getAttribute('data-index'));
+        const cellIndex = Number(event.currentTarget.getAttribute('data-index'));
         const cell = this.state.map[cellIndex];
         const isLeftButtonClick = event.type === 'click';
+        const isFlagSet = cell.flag === 'flag';
 
         if (!isLeftButtonClick) {
             event.preventDefault();
 
-            cell.flag = cell.flag !== 'flag' ? 'flag' : 'closed'; // move to the core
+            cell.flag = isFlagSet ? 'closed' : 'flag'; // move to the core
 
-        } else if (cell.flag === 'flag') {
+        } else if (isFlagSet) {
             event.preventDefault();
             return;
         }

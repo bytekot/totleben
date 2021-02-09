@@ -2,7 +2,7 @@ import React, { MouseEvent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBomb } from '@fortawesome/free-solid-svg-icons/faBomb';
 import { faFlag } from '@fortawesome/free-solid-svg-icons/faFlag';
-import { Cell, GameFinished } from '../../core/Game';
+import { Cell } from '../../core/Game';
 
 interface CellViewProps {
     cell: Cell;
@@ -12,7 +12,7 @@ interface CellViewProps {
 
 const CellView = ({ cell, cellIndex, onClick }: CellViewProps) => {
 
-    const getCallValue = (cell: Cell) => {
+    const getCallValue = (cell: Cell): JSX.Element | string => {
         if (cell.flag === 'flag') {
             return <FontAwesomeIcon icon={faFlag} />;
         }
@@ -21,7 +21,7 @@ const CellView = ({ cell, cellIndex, onClick }: CellViewProps) => {
             return <FontAwesomeIcon icon={faBomb} />;
         }
 
-        return cell.value !== 0 ? cell.value : '';
+        return cell.value !== 0 ? cell.value.toString() : '';
     };
 
     return (
