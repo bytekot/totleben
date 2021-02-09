@@ -158,7 +158,7 @@ export default class Game {
     public readonly isFinished = (index?: number): GameFinished => {
         const map = this.map;
 
-        if (index && map[index].value === 9) {
+        if (index !== undefined && map[index].value === 9) {
             return 'loss';
         }
 
