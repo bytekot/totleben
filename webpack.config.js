@@ -8,18 +8,13 @@ module.exports = {
         filename: 'tottleben.js'
     },
     resolve: {
-        extensions: ['.ts', '.js'],
+        extensions: ['.ts', '.tsx', '.js'],
     },
     module: {
         rules: [
             {
-                test: /\.tsw?$/,
+                test: /\.tsx?$/,
                 loader: 'ts-loader',
-                exclude: /node_modules/
-            },
-            {
-                test: /\.jsx?$/,
-                loader: 'babel-loader',
                 exclude: /node_modules/
             },
             {

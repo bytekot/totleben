@@ -1,4 +1,4 @@
-interface Cell {
+export interface Cell {
     value: number,
     flag: string | undefined;
 };
