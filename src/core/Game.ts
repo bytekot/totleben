@@ -126,11 +126,7 @@ export default class Game {
         return indexModifiries;
     };
 
-    public readonly openCell = (
-        index: number,
-        check: boolean = false
-    ): GameFinished => {
-
+    public readonly openCell = (index: number): void => {
         if (!this.started) {
             this.createMap(index);
         }
@@ -151,9 +147,13 @@ export default class Game {
                 }
             }
         }
-
-        return check ? this.isFinished(index) : false;
     }
+
+    public readonly toggleCellFlag = (index: number): void => {
+        const cell = this.map[index];
+
+        cell.flag = cell.flag === 'flag' ? 'closed' : 'flag'
+    }; 
 
     public readonly isFinished = (index?: number): GameFinished => {
         const map = this.map;
