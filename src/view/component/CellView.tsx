@@ -7,12 +7,10 @@ import { Cell, GameFinished } from '../../core/Game';
 interface CellViewProps {
     cell: Cell;
     cellIndex: number;
-    gameFinished: GameFinished;
     onClick: (event: MouseEvent) => void;
-    onContextMenu: (event: MouseEvent) => void;
 }
 
-const CellView = ({ cell, cellIndex, gameFinished, onClick, onContextMenu }: CellViewProps) => {
+const CellView = ({ cell, cellIndex, onClick }: CellViewProps) => {
 
     const getCallValue = (cell: Cell) => {
         if (cell.flag === 'flag') {
@@ -30,8 +28,8 @@ const CellView = ({ cell, cellIndex, gameFinished, onClick, onContextMenu }: Cel
         <div
             data-index={cellIndex}
             className={`cell ${cell.flag} ${cell.value === 9 ? 'mine' : ''}`}
-            onClick={!gameFinished ? onClick : () => { }}
-            onContextMenu={!gameFinished ? onContextMenu : () => { }}
+            onClick={onClick}
+            onContextMenu={onClick}
         >
             {getCallValue(cell)}
         </div>

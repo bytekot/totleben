@@ -20,47 +20,29 @@ export default class GameView extends React.Component<GameViewProps, GameViewSta
         };
     }
 
-    private readonly getCellFromChild = (element: any): HTMLElement => {
-        let cellElement = element.parentNode;
-
-        while (cellElement && !cellElement.classList.contains('cell')) {
-            cellElement = cellElement.parentNode;
+    private readonly onCellClick = (event: MouseEvent): void => {
+        if (this.state.finished) {
+            return;
         }
 
-        return cellElement;
-    }
-
-    private readonly openCell = (event: MouseEvent): void => {
-        const cellElement = event.currentTarget.classList.contains('cell')
-            ? event.currentTarget
-            : this.getCellFromChild(event.currentTarget);
+        const cellElement = event.currentTarget;
         const cellIndex = Number(cellElement.getAttribute('data-index'));
+        const cell = this.state.map[cellIndex];
+        const isLeftButtonClick = event.type === 'click';
 
-        if (this.state.map[cellIndex].flag === 'flag') {
+        if (!isLeftButtonClick) {
+            event.preventDefault();
+
+            cell.flag = cell.flag !== 'flag' ? 'flag' : 'closed'; // move to the core
+
+        } else if (cell.flag === 'flag') {
             event.preventDefault();
             return;
         }
 
-        const finished = this.props.game.openCell(cellIndex, true);
-
-        if (finished) {
-            this.setState({ finished: finished });
-            return;
-        }
-        this.forceUpdate();
-    }
-
-    private readonly toggleFlag = (event: MouseEvent): void => {
-        event.preventDefault();
-
-        const cellElement = event.currentTarget.classList.contains('cell')
-            ? event.currentTarget
-            : this.getCellFromChild(event.currentTarget);
-        const cell = this.state.map[Number(cellElement.getAttribute('data-index'))];
-
-        cell.flag = cell.flag !== 'flag' ? 'flag' : 'closed';
-
-        const finished = this.props.game.isFinished();
+        const finished = isLeftButtonClick
+            ? this.props.game.openCell(cellIndex, true)
+            : this.props.game.isFinished();
 
         if (finished) {
             this.setState({ finished: finished });
@@ -79,9 +61,7 @@ export default class GameView extends React.Component<GameViewProps, GameViewSta
                         <CellView
                             cell={cell}
                             cellIndex={index}
-                            gameFinished={finished}
-                            onClick={this.openCell}
-                            onContextMenu={this.toggleFlag}
+                            onClick={this.onCellClick}
                         />
                     ))
                 }

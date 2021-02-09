@@ -51,6 +51,10 @@ $cell-size: 32px;
       border-right: 1px solid rgba(0, 0, 0, 0.06);
     }
 
+    &.opened {
+        cursor: default;
+    }
+
     &.flag {
       background-color: rgba(0, 0, 0, 0.1);
       box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
