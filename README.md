@@ -1,2 +1,2 @@
 # Totleben
-Sapper game in development. Latest deployment: https://bytekot.github.io/totleben
+Sapper game (demo): https://bytekot.github.io/totleben
